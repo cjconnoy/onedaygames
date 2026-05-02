@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="robots" content="noindex,nofollow"/>
+  <meta name="description" content="One Day Games - solo indie games made in a day."/>
+  <meta property="og:title" content="One Day Games"/>
+  <meta property="og:description" content="Games made in a day. Play Tic-Tac-Toe now."/>
+  <meta property="og:url" content="https://onedaygames.github.io/onedaygames/"/>
+  <meta property="og:image" content="https://onedaygames.github.io/tic-tac-toe/assets/ttt-night-shooting-star-x.png"/>
+  <title>One Day Games</title>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@500;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ink: #14110f;
+      --paper: #fff8eb;
+      --cream: #f8ead2;
+      --gold: #f6b44b;
+      --orange: #ea7a2f;
+      --rose: #b96082;
+      --blue: #456f9e;
+      --green: #6dbb70;
+      --text: #2a211c;
+      --muted: #6f5d51;
+      --line: rgba(42, 33, 28, 0.15);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: "Nunito", system-ui, sans-serif;
+      color: var(--text);
+      background: var(--paper);
+    }
+
+    a { color: inherit; }
+
+    .nav {
+      position: fixed;
+      inset: 0 0 auto 0;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 28px;
+      color: #fff7ea;
+      background: linear-gradient(180deg, rgba(20,17,15,0.82), rgba(20,17,15,0));
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .brand img {
+      width: 38px;
+      height: 38px;
+      object-fit: contain;
+      border-radius: 8px;
+      background: rgba(255,255,255,0.9);
+      padding: 4px;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      font-size: 0.92rem;
+      font-weight: 800;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      opacity: 0.92;
+    }
+
+    .nav-links a:hover { opacity: 1; color: var(--gold); }
+
+    .hero {
+      min-height: 92vh;
+      display: flex;
+      align-items: flex-end;
+      background:
+        linear-gradient(180deg, rgba(20,17,15,0.18), rgba(20,17,15,0.54) 46%, rgba(20,17,15,0.92)),
+        url("https://onedaygames.github.io/tic-tac-toe/assets/ttt-night-shooting-star-x.png") center / cover no-repeat;
+      color: #fff7ea;
+      padding: 120px 28px 74px;
+    }
+
+    .hero-inner {
+      width: min(1040px, 100%);
+      margin: 0 auto;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 10px;
+      border: 1px solid rgba(255,255,255,0.28);
+      border-radius: 8px;
+      background: rgba(20,17,15,0.42);
+      font-size: 0.78rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      max-width: 780px;
+      margin: 22px 0 12px;
+      font-family: "Fredoka One", system-ui, sans-serif;
+      font-size: clamp(3.4rem, 9vw, 8rem);
+      line-height: 0.9;
+      letter-spacing: 0;
+      text-shadow: 0 4px 34px rgba(0,0,0,0.5);
+    }
+
+    .hero-copy {
+      max-width: 620px;
+      margin: 0;
+      font-size: clamp(1.05rem, 2vw, 1.35rem);
+      line-height: 1.42;
+      color: rgba(255,247,234,0.94);
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 30px;
+    }
+
+    .btn {
+      display: inline-flex;
+      min-height: 46px;
+      align-items: center;
+      justify-content: center;
+      padding: 0 18px;
+      border-radius: 8px;
+      border: 1px solid rgba(255,255,255,0.26);
+      text-decoration: none;
+      font-weight: 900;
+      background: rgba(255,255,255,0.12);
+      backdrop-filter: blur(8px);
+    }
+
+    .btn.primary {
+      border-color: transparent;
+      background: linear-gradient(135deg, var(--gold), var(--orange));
+      color: #1f1308;
+    }
+
+    .section {
+      padding: 70px 28px;
+    }
+
+    .wrap {
+      width: min(1040px, 100%);
+      margin: 0 auto;
+    }
+
+    .section h2 {
+      margin: 0 0 14px;
+      font-family: "Fredoka One", system-ui, sans-serif;
+      font-size: clamp(2rem, 5vw, 3.8rem);
+      letter-spacing: 0;
+      color: var(--ink);
+    }
+
+    .section-sub {
+      max-width: 650px;
+      margin: 0 0 30px;
+      color: var(--muted);
+      font-size: 1.08rem;
+      line-height: 1.55;
+    }
+
+    .game-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1.15fr) minmax(280px, 0.85fr);
+      gap: 28px;
+      align-items: stretch;
+    }
+
+    .game-media {
+      min-height: 330px;
+      border-radius: 8px;
+      overflow: hidden;
+      background: #10131d;
+      border: 1px solid var(--line);
+    }
+
+    .game-media img {
+      width: 100%;
+      height: 100%;
+      min-height: 330px;
+      object-fit: cover;
+      display: block;
+    }
+
+    .game-panel {
+      border-radius: 8px;
+      border: 1px solid var(--line);
+      background: #fffaf0;
+      padding: 28px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .game-title {
+      margin: 0 0 8px;
+      font-family: "Fredoka One", system-ui, sans-serif;
+      font-size: 2.15rem;
+      color: var(--ink);
+    }
+
+    .game-note {
+      margin: 0 0 22px;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .game-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .game-links a {
+      min-height: 42px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 14px;
+      border-radius: 8px;
+      border: 1px solid var(--line);
+      text-decoration: none;
+      font-weight: 900;
+      background: var(--paper);
+    }
+
+    .game-links a:first-child {
+      border-color: transparent;
+      background: var(--green);
+      color: #10220f;
+    }
+
+    .quiet {
+      background: linear-gradient(135deg, #f7e3bd, #faefd9);
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .quiet-box {
+      max-width: 760px;
+      border-radius: 8px;
+      border: 1px solid rgba(42,33,28,0.18);
+      background: rgba(255,255,255,0.45);
+      padding: 24px;
+    }
+
+    .quiet-box p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.58;
+    }
+
+    .footer {
+      padding: 42px 28px;
+      background: var(--ink);
+      color: rgba(255,247,234,0.88);
+    }
+
+    .footer-inner {
+      width: min(1040px, 100%);
+      margin: 0 auto;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 18px;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .footer-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 18px;
+      font-weight: 800;
+    }
+
+    .footer-links a {
+      color: rgba(255,247,234,0.88);
+      text-decoration: none;
+    }
+
+    .footer-links a:hover { color: var(--gold); }
+
+    @media (max-width: 760px) {
+      .nav {
+        padding: 12px 16px;
+      }
+
+      .brand span { display: none; }
+
+      .nav-links {
+        gap: 12px;
+        font-size: 0.84rem;
+      }
+
+      .nav-links a:nth-child(2) { display: none; }
+
+      .hero {
+        min-height: 88vh;
+        padding: 100px 18px 52px;
+      }
+
+      .game-row {
+        grid-template-columns: 1fr;
+      }
+
+      .section {
+        padding: 54px 18px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav class="nav" aria-label="Primary">
+    <a class="brand" href="#top">
+      <img src="https://onedaygames.github.io/tic-tac-toe/assets/one_day_games_art_only_large.png" alt=""/>
+      <span>One Day Games</span>
+    </a>
+    <div class="nav-links">
+      <a href="https://onedaygames.itch.io/tic-tac-toe" target="_blank" rel="noopener">Play</a>
+      <a href="https://x.com/onedaygames_" target="_blank" rel="noopener">X</a>
+      <a href="https://onedaygames.github.io/tic-tac-toe/presskit.html" target="_blank" rel="noopener">Press</a>
+    </div>
+  </nav>
+
+  <main id="top">
+    <section class="hero">
+      <div class="hero-inner">
+        <div class="eyebrow">Solo indie studio</div>
+        <h1>One Day Games</h1>
+        <p class="hero-copy">Games made in a day. Small, warm, playable in the browser, and built to keep getting better.</p>
+        <div class="actions">
+          <a class="btn primary" href="https://onedaygames.itch.io/tic-tac-toe" target="_blank" rel="noopener">Play Tic-Tac-Toe</a>
+          <a class="btn" href="https://x.com/onedaygames_" target="_blank" rel="noopener">Follow Updates</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="games">
+      <div class="wrap">
+        <h2>Now Live</h2>
+        <p class="section-sub">The first One Day Games release is live on itch.io. Night Shift is the latest update.</p>
+        <div class="game-row">
+          <div class="game-media">
+            <img src="https://onedaygames.github.io/tic-tac-toe/assets/ttt-night-shooting-star-x.png" alt="Tic-Tac-Toe Night Shift screenshot"/>
+          </div>
+          <div class="game-panel">
+            <h3 class="game-title">Tic-Tac-Toe</h3>
+            <p class="game-note">A cozy browser version of the classic game, now with a day and night world cycle, lanterns, moonlight, and shooting stars.</p>
+            <div class="game-links">
+              <a href="https://onedaygames.itch.io/tic-tac-toe" target="_blank" rel="noopener">Play Free</a>
+              <a href="https://onedaygames.github.io/tic-tac-toe/presskit.html" target="_blank" rel="noopener">Press Kit</a>
+              <a href="https://x.com/onedaygames_" target="_blank" rel="noopener">Follow</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section quiet">
+      <div class="wrap">
+        <div class="quiet-box">
+          <p>This public hub is intentionally small while the studio's internal operating model matures. The public surface is the games, the press kit, and release updates. The internal studio system stays private by design.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <strong>One Day Games</strong>
+      <div class="footer-links">
+        <a href="https://onedaygames.itch.io/tic-tac-toe" target="_blank" rel="noopener">Play</a>
+        <a href="https://onedaygames.github.io/tic-tac-toe/presskit.html" target="_blank" rel="noopener">Press Kit</a>
+        <a href="https://x.com/onedaygames_" target="_blank" rel="noopener">X</a>
+        <a href="mailto:play.onedaygames@gmail.com">Contact</a>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>
